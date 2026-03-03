@@ -3,37 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PHỎM PRO v19 - STRICT MODE</title>
+    <title>PHỎM PRO v24 - GITHUB READY</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root { --gold: #FFD700; --bg: #0d0d0d; --card: #1a1a1a; --text: #efefef; --accent: #00ff88; --red: #ff4d4d; --purple: #a29bfe; --blue: #3498db; }
-        body { font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; }
+        body { font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; overflow-x: hidden; }
         .container { max-width: 500px; margin: auto; }
         .app-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; }
-        .app-logo { width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--gold); }
+        .app-logo { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--gold); }
         .card { background: var(--card); padding: 15px; border-radius: 20px; border: 1px solid #333; margin-bottom: 10px; }
         #screen-play { display: none; }
-        .player-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .player-card { background: var(--card); padding: 10px; border-radius: 15px; text-align: center; border: 2px solid #333; position: relative; }
-        .avt-play { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid #444; }
-        .badge { position: absolute; font-size: 8px; padding: 2px 4px; border-radius: 4px; font-weight: bold; top: 5px; }
-        .badge-chot { background: var(--blue); left: 5px; }
-        .badge-bi-chot { background: var(--red); left: 5px; }
-        .badge-u { background: var(--purple); right: 5px; animation: pulse 1s infinite; }
+        .player-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .player-card { background: var(--card); padding: 12px 8px; border-radius: 20px; text-align: center; border: 2px solid #333; position: relative; transition: all 0.2s; }
+        .active-card { border-color: var(--accent) !important; box-shadow: 0 0 8px rgba(0,255,136,0.2); }
+        .avt-container { width: 60px; height: 60px; margin: 0 auto 8px; position: relative; }
+        .avt-main { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #444; background: #222; }
+        .badge { position: absolute; font-size: 9px; padding: 2px 5px; border-radius: 5px; font-weight: bold; top: -5px; color: white; z-index: 5; }
+        .badge-den { background: var(--red); left: -10px; border: 1px solid gold; }
+        .badge-u { background: var(--purple); right: -10px; animation: pulse 1s infinite; }
         .rank-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 8px; }
-        button.btn-s { padding: 8px 1px; border-radius: 6px; border: none; background: #2a2a2a; color: #777; font-size: 10px; font-weight: bold; }
-        button.btn-s.active { color: #000; }
-        .active-nhat { background: var(--accent) !important; }
-        .active-mom { background: var(--red) !important; color: white !important; }
-        .active-chot { background: var(--blue) !important; color: white !important; }
-        .active-u { background: var(--purple) !important; color: white !important; }
-        .btn-calc { background: linear-gradient(135deg, #00ff88, #00bd65); color: #000; width: 100%; padding: 15px; border: none; border-radius: 15px; font-weight: 800; font-size: 16px; margin-top: 10px; }
-        .btn-undo { background: #444; color: white; width: 100%; padding: 10px; border: none; border-radius: 10px; margin-top: 5px; font-size: 12px; }
-        .history-box { background: #000; padding: 8px; border-radius: 12px; margin-top: 10px; max-height: 200px; overflow-y: auto; border: 1px solid #222; }
-        .hist-row { display: grid; grid-template-columns: 30px 1fr 1fr 1fr 1fr 30px; font-size: 11px; padding: 8px 0; border-bottom: 1px solid #111; text-align: center; align-items: center; }
-        .btn-del { color: var(--red); font-size: 14px; cursor: pointer; }
-        .hidden { display: none !important; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
+        button.btn-s { padding: 8px 0; border-radius: 8px; border: none; background: #2a2a2a; color: #888; font-size: 11px; font-weight: bold; cursor: pointer; }
+        .active-nhat { background: var(--accent) !important; color: #000 !important; }
+        .active-mom { background: var(--red) !important; color: #fff !important; }
+        .active-u { background: var(--purple) !important; color: #fff !important; }
+        .active-den { background: #ff0000 !important; color: #fff !important; box-shadow: 0 0 10px red; }
+        .btn-calc { background: linear-gradient(135deg, #00ff88, #00bd65); color: #000; width: 100%; padding: 16px; border: none; border-radius: 15px; font-weight: 800; font-size: 18px; margin-top: 15px; }
+        .btn-calc:disabled { background: #333 !important; color: #666 !important; cursor: not-allowed; }
+        .history-box { background: #000; padding: 10px; border-radius: 15px; margin-top: 15px; max-height: 250px; overflow-y: auto; border: 1px solid #222; }
+        .hist-row { display: grid; grid-template-columns: 30px 1fr 1fr 1fr 1fr 30px; font-size: 12px; padding: 10px 0; border-bottom: 1px solid #111; text-align: center; }
+        .setup-row { display: grid; grid-template-columns: 55px 1fr; gap: 10px; align-items: center; margin-bottom: 10px; background: #222; padding: 8px; border-radius: 15px; }
+        .avt-upload { width: 50px; height: 50px; border-radius: 50%; background: #333; position: relative; overflow: hidden; border: 1px dashed var(--accent); }
+        .avt-upload img { width: 100%; height: 100%; object-fit: cover; }
+        .avt-upload input { position: absolute; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
     </style>
 </head>
 <body>
@@ -42,198 +44,174 @@
     <div class="app-header">
         <div style="display:flex; align-items:center;">
             <img src="https://files.catbox.moe/p94fzh.png" class="app-logo">
-            <div style="margin-left:10px;"><b style="color:var(--gold);">PHỎM PRO</b><br><small style="font-size:9px; color:#666;">v19 • LUẬT NGHIÊM NGẶT</small></div>
+            <div style="margin-left:10px;"><b style="color:var(--gold);">PHỎM PRO</b><br><small style="font-size:9px;">v24 • ONLINE READY</small></div>
         </div>
-        <button onclick="resetAll()" style="background:none; border:1px solid #444; color:#666; font-size:10px; border-radius:5px; padding:5px;">Sòng mới</button>
+        <button onclick="resetSòng()" style="background:none; border:1px solid #444; color:#666; font-size:10px; border-radius:8px; padding:5px 10px;">Reset</button>
     </div>
 
     <div id="screen-setup" class="card">
-        <div id="setup-players"></div>
-        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:10px;">
-            <div style="font-size:9px">Nhì <input type="number" id="m_nhi" value="2" style="width:100%"></div>
-            <div style="font-size:9px">Ba <input type="number" id="m_ba" value="4" style="width:100%"></div>
-            <div style="font-size:9px">Bét <input type="number" id="m_bet" value="6" style="width:100%"></div>
-            <div style="font-size:9px">Móm <input type="number" id="m_mom" value="10" style="width:100%"></div>
-            <div style="font-size:9px">Chốt <input type="number" id="m_chot" value="10" style="width:100%"></div>
-            <div style="font-size:9px">Ù <input type="number" id="m_u" value="15" style="width:100%"></div>
+        <div id="setup-list"></div>
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:10px; background:#111; padding:10px; border-radius:12px;">
+            <div style="font-size:10px">Nhì <input type="number" id="m_nhi" value="2" style="width:90%; background:#222; color:white; border:none;"></div>
+            <div style="font-size:10px">Ba <input type="number" id="m_ba" value="4" style="width:90%; background:#222; color:white; border:none;"></div>
+            <div style="font-size:10px">Bét <input type="number" id="m_bet" value="6" style="width:90%; background:#222; color:white; border:none;"></div>
+            <div style="font-size:10px">Móm <input type="number" id="m_mom" value="10" style="width:90%; background:#222; color:white; border:none;"></div>
+            <div style="font-size:10px">Chốt <input type="number" id="m_chot" value="10" style="width:90%; background:#222; color:white; border:none;"></div>
+            <div style="font-size:10px">Ù <input type="number" id="m_u" value="15" style="width:90%; background:#222; color:white; border:none;"></div>
         </div>
-        <button class="btn-calc" onclick="startGame()">VÀO SÒNG</button>
+        <button class="btn-calc" onclick="batDau()">BẮT ĐẦU CHƠI</button>
     </div>
 
     <div id="screen-play">
         <div class="player-grid" id="board"></div>
-        <button class="btn-calc" onclick="calculate()">CHỐT VÁN & TÍNH TIỀN</button>
-        <button class="btn-undo" onclick="undoLast()">↩️ HOÀN TÁC (UNDO)</button>
+        <div id="msg-lock" style="text-align:center; color:var(--red); font-size:11px; margin-top:10px;">⚠️ Chọn đủ 4 người hoặc cặp Ù-Đền</div>
+        <button class="btn-calc" id="btn-calc" onclick="chotVan()" disabled>CHỐT VÁN</button>
         <div class="history-box" id="hist-box"></div>
     </div>
 </div>
 
 <script>
-    let players = [], cur = {}, settings = {}, history = [];
-    let avatars = ["","","",""];
+    let d = { p: [], h: [], s: {}, cur: {} };
+    let tempAvts = ["", "", "", ""];
 
+    // Khởi tạo form setup
+    const setupList = document.getElementById('setup-list');
     for(let i=0; i<4; i++) {
-        document.getElementById('setup-players').innerHTML += `
-            <div style="display:grid; grid-template-columns:50px 1fr; gap:10px; margin-bottom:8px; background:#222; padding:8px; border-radius:12px;">
-                <div style="width:40px; height:40px; border-radius:50%; background:#333; position:relative; overflow:hidden;">
-                    <img id="img_${i}" style="width:100%; height:100%; object-fit:cover;">
-                    <input type="file" style="position:absolute; opacity:0; inset:0;" onchange="preview(${i}, this)">
+        setupList.innerHTML += `
+            <div class="setup-row">
+                <div class="avt-upload">
+                    <img id="p_${i}" src="https://i.pravatar.cc/150?u=${i}">
+                    <input type="file" accept="image/*" onchange="upAvt(${i}, this)">
                 </div>
-                <input type="text" id="n${i}" style="background:transparent; border:none; color:white; border-bottom:1px solid #444; width:100%; outline:none;" value="Người ${i+1}">
+                <input type="text" id="name_${i}" placeholder="Tên người ${i+1}" style="background:transparent; border:none; color:white; border-bottom:1px solid #444; width:100%; outline:none;" value="Người ${i+1}">
             </div>`;
     }
 
+    function upAvt(i, el) {
+        if (el.files && el.files[0]) {
+            let r = new FileReader();
+            r.onload = e => { document.getElementById('p_'+i).src = e.target.result; tempAvts[i] = e.target.result; };
+            r.readAsDataURL(el.files[0]);
+        }
+    }
+
+    // Tải dữ liệu cũ nếu có
     window.onload = () => {
-        const saved = localStorage.getItem('phom_pro_v19');
-        if (saved) {
-            const data = JSON.parse(saved);
-            players = data.players; history = data.history; settings = data.settings;
-            document.getElementById('screen-setup').style.display = 'none';
-            document.getElementById('screen-play').style.display = 'block';
-            render(); renderHist();
-        }
+        try {
+            const saved = localStorage.getItem('phom_v24');
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                d.p = parsed.p; d.h = parsed.h; d.s = parsed.s;
+                document.getElementById('screen-setup').style.display = 'none';
+                document.getElementById('screen-play').style.display = 'block';
+                render(); renderHist();
+            }
+        } catch(e) { console.error("Lỗi tải dữ liệu"); }
     }
 
-    function preview(idx, input) {
-        if (input.files && input.files[0]) {
-            let reader = new FileReader();
-            reader.onload = e => { document.getElementById('img_'+idx).src = e.target.result; avatars[idx] = e.target.result; }
-            reader.readAsDataURL(input.files[0]);
+    function batDau() {
+        d.s = { nhi: +document.getElementById('m_nhi').value, ba: +document.getElementById('m_ba').value, bet: +document.getElementById('m_bet').value, mom: +document.getElementById('m_mom').value, chot: +document.getElementById('m_chot').value, u: +document.getElementById('m_u').value };
+        for(let i=0; i<4; i++) {
+            d.p.push({ id: i, name: document.getElementById('name_'+i).value, total: 0, avt: tempAvts[i] || `https://i.pravatar.cc/150?u=${i}` });
         }
-    }
-
-    function startGame() {
-        settings = { nhi: +document.getElementById('m_nhi').value, ba: +document.getElementById('m_ba').value, bet: +document.getElementById('m_bet').value, mom: +document.getElementById('m_mom').value, chot: +document.getElementById('m_chot').value, u: +document.getElementById('m_u').value };
-        for(let i=0; i<4; i++) players.push({ id: i, name: document.getElementById('n'+i).value, total: 0, avt: avatars[i] || `https://i.pravatar.cc/150?u=${i}` });
         document.getElementById('screen-setup').style.display = 'none';
         document.getElementById('screen-play').style.display = 'block';
-        saveData(); render();
+        save(); render();
     }
 
     function render() {
         const board = document.getElementById('board');
-        const pickedRanks = Object.values(cur).map(v => v.rank).filter(r => r !== null);
-        const hasU = pickedRanks.includes('u');
+        const activeCount = Object.keys(d.cur).filter(k => d.cur[k].r !== null || d.cur[k].den).length;
+        const hasU = Object.values(d.cur).some(v => v.r === 'u');
+        const hasDen = Object.values(d.cur).some(v => v.den);
 
-        board.innerHTML = players.map(p => {
-            const my = cur[p.id] || { rank: null, chot: null };
+        // Khóa/Mở nút
+        document.getElementById('btn-calc').disabled = !(activeCount === 4 || (hasU && hasDen));
+        document.getElementById('msg-lock').style.display = (activeCount === 4 || (hasU && hasDen)) ? 'none' : 'block';
+
+        board.innerHTML = d.p.map(p => {
+            const c = d.cur[p.id] || { r: null, den: false };
             return `
-                <div class="player-card" style="border-color: ${my.rank === 'u' ? 'var(--purple)' : (my.rank ? 'var(--accent)' : '#333')}">
-                    ${my.rank === 'u' ? '<div class="badge badge-u">Ù</div>' : ''}
-                    ${my.chot === 'an_chot' ? '<div class="badge badge-chot">Ăn C</div>' : ''}
-                    ${my.chot === 'bi_chot' ? '<div class="badge badge-bi-chot">Bị C</div>' : ''}
-                    <img class="avt-play" src="${p.avt}">
-                    <div style="font-weight:bold; font-size:11px">${p.name}</div>
-                    <div style="color:var(--gold); font-size:16px; font-weight:900">${p.total}</div>
+                <div class="player-card ${c.r || c.den ? 'active-card' : ''}">
+                    <div class="avt-container">
+                        ${c.r==='u' ? '<div class="badge badge-u">Ù</div>' : ''}
+                        ${c.den ? '<div class="badge badge-den">ĐỀN</div>' : ''}
+                        <img class="avt-main" src="${p.avt}">
+                    </div>
+                    <div style="font-size:12px; font-weight:bold;">${p.name}</div>
+                    <div style="color:var(--gold); font-size:18px; font-weight:800;">${p.total}</div>
                     <div class="rank-grid">
-                        <div class="rank-grid ${hasU || my.rank==='mom' ? 'hidden' : ''}" style="grid-column: span 2; margin:0">
-                            <button class="btn-s ${my.rank=='nhat'?'active active-nhat':''} ${pickedRanks.includes('nhat') && my.rank!='nhat'?'hidden':''}" onclick="set(${p.id},'nhat')">1</button>
-                            <button class="btn-s ${my.rank=='nhi'?'active active-nhat':''} ${pickedRanks.includes('nhi') && my.rank!='nhi'?'hidden':''}" onclick="set(${p.id},'nhi')">2</button>
-                            <button class="btn-s ${my.rank=='ba'?'active active-nhat':''} ${pickedRanks.includes('ba') && my.rank!='ba'?'hidden':''}" onclick="set(${p.id},'ba')">3</button>
-                            <button class="btn-s ${my.rank=='bet'?'active active-nhat':''} ${pickedRanks.includes('bet') && my.rank!='bet'?'hidden':''}" onclick="set(${p.id},'bet')">B</button>
-                        </div>
-                        <button class="btn-s ${my.rank==='mom'?'active active-mom':''} ${hasU && my.rank!=='mom' ? 'hidden' : ''}" style="grid-column: span 2" onclick="set(${p.id},'mom')">Móm</button>
-                        <button class="btn-s ${my.chot==='an_chot'?'active active-chot':''}" onclick="setChot(${p.id},'an_chot')">Ăn C</button>
-                        <button class="btn-s ${my.chot==='bi_chot'?'active active-mom':''}" onclick="setChot(${p.id},'bi_chot')">Bị C</button>
-                        <button class="btn-s ${my.rank==='u'?'active active-u':''} ${hasU && my.rank!=='u' ? 'hidden' : ''}" style="grid-column: span 2" onclick="set(${p.id},'u')">Ù</button>
-                        ${hasU && my.rank!=='u' ? `<button class="btn-s ${my.rank==='den'?'active active-mom':''}" style="grid-column: span 2" onclick="set(${p.id},'den')">Đền</button>` : ''}
+                        <button class="btn-s ${c.r=='nhat'?'active-nhat':''}" onclick="chon(${p.id},'nhat')">1</button>
+                        <button class="btn-s ${c.r=='nhi'?'active-nhat':''}" onclick="chon(${p.id},'nhi')">2</button>
+                        <button class="btn-s ${c.r=='ba'?'active-nhat':''}" onclick="chon(${p.id},'ba')">3</button>
+                        <button class="btn-s ${c.r=='bet'?'active-nhat':''}" onclick="chon(${p.id},'bet')">B</button>
+                        <button class="btn-s ${c.r=='mom'?'active-mom':''}" onclick="chon(${p.id},'mom')">Móm</button>
+                        <button class="btn-s ${c.r=='u'?'active-u':''}" onclick="chon(${p.id},'u')">Ù</button>
+                        <button class="btn-s ${c.den?'active-den':''}" style="grid-column:span 2" onclick="chonDen(${p.id})">ĐỀN</button>
                     </div>
                 </div>`;
         }).join('');
     }
 
-    function set(id, rank) {
-        if (!cur[id]) cur[id] = { rank: null, chot: null };
-        if (rank === 'u' && cur[id].rank !== 'u') confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-        cur[id].rank = (cur[id].rank === rank) ? null : rank;
+    function chon(id, r) {
+        if (!d.cur[id]) d.cur[id] = { r: null, den: false };
+        if (r === 'u' && d.cur[id].r !== 'u') confetti({ particleCount: 100 });
+        d.cur[id].r = (d.cur[id].r === r) ? null : r;
+        if (d.cur[id].r) d.cur[id].den = false;
         render();
     }
 
-    function setChot(id, type) {
-        if (!cur[id]) cur[id] = { rank: null, chot: null };
-        cur[id].chot = (cur[id].chot === type) ? null : type;
+    function chonDen(id) {
+        if (!d.cur[id]) d.cur[id] = { r: null, den: false };
+        d.cur[id].den = !d.cur[id].den;
+        if (d.cur[id].den) d.cur[id].r = null;
         render();
     }
 
-    function calculate() {
-        const uId = Object.keys(cur).find(k => cur[k].rank === 'u');
-        const denId = Object.keys(cur).find(k => cur[k].rank === 'den');
-        
-        // KIỂM TRA CHẶT CHẼ:
-        // Đếm số người đã chọn trạng thái (hạng hoặc móm hoặc ù/đền)
-        const activeStates = players.filter(p => cur[p.id]?.rank !== null);
-        
-        // Nếu không có ai Ù, bắt buộc phải đủ 4 người có hạng
-        if (uId === undefined && activeStates.length < 4) {
-            alert("⚠️ LỖI: Chưa chọn đủ thứ hạng cho 4 người! (Bắt buộc Nhất, Nhì, Ba, Bét hoặc Móm)");
-            return;
-        }
+    function chotVan() {
+        let diff = [0, 0, 0, 0], ranks = [];
+        const uId = Object.keys(d.cur).find(k => d.cur[k].r === 'u');
+        const denId = Object.keys(d.cur).find(k => d.cur[k].den);
 
-        // Kiểm tra số lượng Ăn/Bị chốt phải khớp
-        let listAn = players.filter(p => cur[p.id]?.chot === 'an_chot');
-        let listBi = players.filter(p => cur[p.id]?.chot === 'bi_chot');
-        if (listAn.length !== listBi.length) { alert("⚠️ LỖI: Số người Ăn Chốt và Bị Chốt không khớp!"); return; }
-
-        let diff = [0, 0, 0, 0], roundRanks = [];
-
-        // Tính tiền Phỏm
         if (uId !== undefined) {
-            let win = settings.u * 3;
-            if (denId !== undefined) { diff[uId] += win; diff[denId] -= win; }
-            else { diff[uId] += win; players.forEach(p => { if(p.id != uId) diff[p.id] -= settings.u; }); }
+            let win = d.s.u * 3;
+            if (denId !== undefined) { diff[uId] = win; diff[denId] = -win; }
+            else { diff[uId] = win; d.p.forEach(p => { if(p.id != uId) diff[p.id] = -d.s.u; }); }
         } else {
-            const nhatId = Object.keys(cur).find(k => cur[k].rank === 'nhat');
-            if (!nhatId) { alert("⚠️ LỖI: Thiếu người về Nhất!"); return; }
-            players.forEach(p => {
+            const nhatId = Object.keys(d.cur).find(k => d.cur[k].r === 'nhat');
+            d.p.forEach(p => {
                 if (p.id == nhatId) return;
-                let m = settings[cur[p.id]?.rank] || settings.bet;
+                let m = (d.cur[p.id]?.r === 'mom') ? d.s.mom : (d.s[d.cur[p.id]?.r] || d.s.bet);
                 diff[p.id] -= m; diff[nhatId] += m;
             });
         }
 
-        // Tính tiền Chốt
-        players.forEach(p => {
-            if (cur[p.id]?.chot === 'an_chot') diff[p.id] += settings.chot;
-            if (cur[p.id]?.chot === 'bi_chot') diff[p.id] -= settings.chot;
-        });
-
-        players.forEach((p, i) => {
+        d.p.forEach((p, i) => {
             p.total += diff[i];
-            let r = cur[i]?.rank;
-            roundRanks.push(r === 'u' ? 'Ù' : (r === 'mom' ? 'M' : (r === 'nhat' ? '1' : (r === 'nhi' ? '2' : (r === 'ba' ? '3' : (r === 'bet' ? 'B' : '-'))))));
+            ranks.push(d.cur[i]?.den ? 'ĐỀN' : (d.cur[i]?.r ? d.cur[i].r.charAt(0).toUpperCase() : '-'));
         });
 
-        history.push({ money: [...diff], ranks: roundRanks });
-        cur = {}; render(); renderHist(); saveData();
-    }
-
-    function undoLast() {
-        if (history.length === 0) return;
-        if (!confirm("Hoàn tác ván vừa rồi?")) return;
-        const last = history.pop();
-        players.forEach((p, i) => p.total -= last.money[i]);
-        render(); renderHist(); saveData();
-    }
-
-    function deleteVanish(index) {
-        if (!confirm("Xóa ván này khỏi lịch sử?")) return;
-        const target = history[index];
-        players.forEach((p, i) => p.total -= target.money[i]);
-        history.splice(index, 1);
-        render(); renderHist(); saveData();
+        d.h.push({ m: [...diff], r: ranks });
+        d.cur = {}; render(); renderHist(); save();
     }
 
     function renderHist() {
-        document.getElementById('hist-box').innerHTML = history.map((h, i) => `
+        document.getElementById('hist-box').innerHTML = d.h.map((h, i) => `
             <div class="hist-row">
                 <div style="color:#444">${i+1}</div>
-                ${h.money.map((v, idx) => `<div><span style="font-size:9px;color:#666">${h.ranks[idx]}</span><span style="color:${v>0?'var(--accent)':v<0?'var(--red)':'#444'}">${v>0?'+'+v:v}</span></div>`).join('')}
-                <div class="btn-del" onclick="deleteVanish(${i})">×</div>
+                ${h.m.map((v, idx) => `<div><span style="font-size:8px;color:#666">${h.r[idx]}</span><br><b style="color:${v>0?'var(--accent)':v<0?'var(--red)':'#444'}">${v>0?'+'+v:v}</b></div>`).join('')}
+                <div style="color:red" onclick="xoaVan(${i})">×</div>
             </div>`).reverse().join('');
     }
 
-    function saveData() { localStorage.setItem('phom_pro_v19', JSON.stringify({players, history, settings})); }
+    function xoaVan(i) {
+        d.p.forEach((p, idx) => p.total -= d.h[i].m[idx]);
+        d.h.splice(i, 1);
+        render(); renderHist(); save();
+    }
 
+    function save() { try { localStorage.setItem('phom_v24', JSON.stringify(d)); } catch(e) { alert("Bộ nhớ đầy, hãy reset sòng!"); } }
+    function resetSòng() { if(confirm("Xóa sòng?")) { localStorage.clear(); location.reload(); } }
 </script>
 </body>
 </html>
