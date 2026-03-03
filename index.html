@@ -104,7 +104,7 @@
 
     function startGame() {
         settings = { nhi: +document.getElementById('m_nhi').value, ba: +document.getElementById('m_ba').value, bet: +document.getElementById('m_bet').value, mom: +document.getElementById('m_mom').value, chot: +document.getElementById('m_chot').value, u: +document.getElementById('m_u').value };
-        for(let i=0; i<4; i++) players.push({ id: i, name: document.getElementById('n'+i).value, total: 0, avt: avatars[i] || https://i.pravatar.cc/150?u=${i} });
+        for(let i=0; i<4; i++) players.push({ id: i, name: document.getElementById('n'+i).value, total: 0, avt: avatars[i] || `https://i.pravatar.cc/150?u=${i}` });
         document.getElementById('screen-setup').style.display = 'none';
         document.getElementById('screen-play').style.display = 'block';
         saveData(); render();
@@ -136,7 +136,7 @@
                         <button class="btn-s ${my.chot==='an_chot'?'active active-chot':''}" onclick="setChot(${p.id},'an_chot')">Ăn C</button>
                         <button class="btn-s ${my.chot==='bi_chot'?'active active-mom':''}" onclick="setChot(${p.id},'bi_chot')">Bị C</button>
                         <button class="btn-s ${my.rank==='u'?'active active-u':''} ${hasU && my.rank!=='u' ? 'hidden' : ''}" style="grid-column: span 2" onclick="set(${p.id},'u')">Ù</button>
-                        ${hasU && my.rank!=='u' ? <button class="btn-s ${my.rank==='den'?'active active-mom':''}" style="grid-column: span 2" onclick="set(${p.id},'den')">Đền</button> : ''}
+                        ${hasU && my.rank!=='u' ? `<button class="btn-s ${my.rank==='den'?'active active-mom':''}" style="grid-column: span 2" onclick="set(${p.id},'den')">Đền</button>` : ''}
                     </div>
                 </div>`;
         }).join('');
@@ -227,13 +227,13 @@
         document.getElementById('hist-box').innerHTML = history.map((h, i) => `
             <div class="hist-row">
                 <div style="color:#444">${i+1}</div>
-                ${h.money.map((v, idx) => <div><span style="font-size:9px;color:#666">${h.ranks[idx]}</span><span style="color:${v>0?'var(--accent)':v<0?'var(--red)':'#444'}">${v>0?'+'+v:v}</span></div>).join('')}
+                ${h.money.map((v, idx) => `<div><span style="font-size:9px;color:#666">${h.ranks[idx]}</span><span style="color:${v>0?'var(--accent)':v<0?'var(--red)':'#444'}">${v>0?'+'+v:v}</span></div>`).join('')}
                 <div class="btn-del" onclick="deleteVanish(${i})">×</div>
             </div>`).reverse().join('');
     }
 
     function saveData() { localStorage.setItem('phom_pro_v19', JSON.stringify({players, history, settings})); }
-    function resetAll() { if(confirm("Bạn muốn xóa hết dữ liệu để lập sòng mới?")) { localStorage.clear(); location.reload(); } }
+
 </script>
 </body>
 </html>
